@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "homepage": "https://github.com/interFace-dk/jqueryConfirm",
   "authors": [
-    "Thomas Christensen <toc@interface.dk>"
+    "Thomas Christensen <toc@interface.dk>",
+    "Jens Sørensen <jes@interface.dk>"
   ],
   "description": "jquery Confirm plugin",
   "main": "confirm.js",
