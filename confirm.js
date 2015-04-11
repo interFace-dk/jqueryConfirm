@@ -7,37 +7,35 @@
             ev.preventDefault();
             ev.stopPropagation();
 
-            var href = settings.route;
-
-            if (href == null) {
-                href = this.href;
+            if (settings.route == null) {
+                settings.route = $(this).attr('href');
             }
 
-            var me = this;
+            var me = $(this);
             bootbox.confirm(settings.message, function(result){
                 if (result) {
                     if (settings.ajax) {
-                        handleAjax(me, href);
+                        handleAjax(me);
                     } else {
-                        handleRaw(me, href);
+                        handleRaw(me);
                     }
                 }
             });
         });
 
-        var handleAjax = function(el, href) {
+        var handleAjax = function(el) {
             $.ajax({
-                url: href,
+                url: settings.route,
                 data: settings.data,
                 method: settings.method,
-                dataType: 'json',
+                dataType: settings.dataType,
                 context: el,
             }).done(settings.onAjaxSuccess).fail(settings.onAjaxFailure);
         };
 
-        var handleRaw = function(el, href) {
+        var handleRaw = function(el) {
             var form = $("<form>");
-            form.attr('action', href);
+            form.attr('action', settings.route);
 
             if (settings.method == 'GET') {
                 form.attr('method', 'GET');
@@ -48,9 +46,11 @@
 
 
             //Append all the data attibutes as inputfields
-            for(var key in settings.data) {
-                if (settings.data.hasOwnProperty(key)) {
-                    form.append(inputField(key, settings.data[key], 'hidden'));
+            if (settings.data != null) {
+                for(var key in settings.data) {
+                    if (settings.data.hasOwnProperty(key)) {
+                        form.append(inputField(key, settings.data[key], 'hidden'));
+                    }
                 }
             }
 
@@ -70,6 +70,7 @@
     $.fn.confirm.defaults = {
         ajax: false,
         method: 'GET',
+        dataType: 'json',
         route: null,
         data: {},
         message: 'Are you sure you want to delete?',
